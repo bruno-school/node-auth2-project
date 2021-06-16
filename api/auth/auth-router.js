@@ -4,7 +4,6 @@ const bcrypt = require('bcryptjs')
 const {JWT_SECRET} = require('../secrets') // use this secret!
 const jwt = require('jsonwebtoken')
 const User = require('../users/users-model')
-const {json} = require('express')
 
 router.post('/register', validateRoleName, (req, res, next) => {
 	/**
@@ -35,11 +34,11 @@ router.post('/login', checkUsernameExists, async (req, res, next) => {
 	if (bcrypt.compareSync(req.body.password, req.user.password)) {
 		const token = buildToken(req.user)
 		res.status(200).json({
-			message: `Welcome ${req.user.username}`,
+			message: `${req.user.username} is back`,
 			token: token,
 		})
 	} else {
-		next({status: 401})
+		next({status: 401, message: '/invalid credentials'})
 	}
 	/**
     [POST] /api/auth/login { "username": "sue", "password": "1234" }
